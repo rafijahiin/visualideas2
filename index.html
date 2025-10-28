@@ -6,6 +6,7 @@
     <title>LNOB Dashboard: Leave No One Behind Monitoring</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Included the Chart.js datalabels plugin -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
@@ -362,53 +363,16 @@
             font-size: 0.9rem;
         }
         
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 1.5rem;
-        }
-        
-        .tab {
-            padding: 8px 16px;
-            background: #f1f1f1;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-        
-        .tab.active {
-            background: var(--secondary);
-            color: white;
-        }
+        /* Removed non-functional tab styles */
         
         .heatmap-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            /* Changed to 1fr for better responsiveness */
+            grid-template-columns: 1fr;
             gap: 20px;
         }
         
-        .heatmap-legend {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 10px;
-        }
-        
-        .heatmap-color-scale {
-            height: 20px;
-            width: 100%;
-            background: linear-gradient(to right, #f7fbff, #deebf7, #c6dbef, #9ecae1, #6baed6, #4292c6, #2171b5, #08519c, #08306b);
-            border-radius: 4px;
-        }
-        
-        .heatmap-labels {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            margin-top: 5px;
-            font-size: 0.8rem;
-        }
+        /* Removed disconnected heatmap legend styles */
         
         @media (max-width: 768px) {
             .header-content {
@@ -517,32 +481,7 @@
                 <h3 class="chart-title">Service Availability Across Development vs. Humanitarian Contexts</h3>
                 <div class="heatmap-container">
                     <canvas id="contextHeatmap"></canvas>
-                    <div>
-                        <h4>Context Comparison</h4>
-                        <div class="metric-grid">
-                            <div class="metric-card">
-                                <div class="metric-value">Cox's Bazar</div>
-                                <div class="metric-label">Humanitarian Context</div>
-                            </div>
-                            <div class="metric-card">
-                                <div class="metric-value">Host Communities</div>
-                                <div class="metric-label">Mixed Context</div>
-                            </div>
-                            <div class="metric-card">
-                                <div class="metric-value">Priority Districts</div>
-                                <div class="metric-label">Development Context</div>
-                            </div>
-                        </div>
-                        <div class="heatmap-legend">
-                            <div>Service Availability Score</div>
-                            <div class="heatmap-color-scale"></div>
-                            <div class="heatmap-labels">
-                                <span>Low</span>
-                                <span>Medium</span>
-                                <span>High</span>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Removed the disconnected static heatmap legend -->
                 </div>
             </div>
 
@@ -557,6 +496,8 @@
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: 73%; background-color: var(--success);"></div>
                         </div>
+                    </div>
+                    <div class="progress-container">
                         <div class="progress-label">
                             <span>Hospitals with GBV-Trained Staff</span>
                             <span>30%</span>
@@ -564,6 +505,8 @@
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: 30%; background-color: var(--warning);"></div>
                         </div>
+                    </div>
+                    <div class="progress-container">
                         <div class="progress-label">
                             <span>SRHR Indicators in DHIS2</span>
                             <span>8/14</span>
@@ -604,10 +547,7 @@
                     <h2 class="section-title">1. LNOB Reach & Trends</h2>
                     <p class="section-subtitle">Tracking inclusion of vulnerable populations over time</p>
                 </div>
-                <div class="tabs">
-                    <div class="tab active">Time Series</div>
-                    <div class="tab">Comparative</div>
-                </div>
+                <!-- Removed non-functional tabs -->
             </div>
 
             <div class="chart-grid">
@@ -682,6 +622,9 @@
     </footer>
 
     <script>
+        // ***FIX 1: Register the datalabels plugin***
+        Chart.register(ChartDataLabels);
+
         // Initialize the map
         const map = L.map('priorityDistrictsMap').setView([23.6850, 90.3563], 7); // Centered on Bangladesh
 
@@ -690,7 +633,7 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Sample data for priority districts (in a real implementation, this would come from an API)
+        // Sample data for priority districts
         const districtData = [
             { name: "Cox's Bazar", lat: 21.4272, lng: 92.0058, anc4: 85, readiness: 78, midwife: 92 },
             { name: "Bandarban", lat: 21.8311, lng: 92.3686, anc4: 72, readiness: 65, midwife: 68 },
@@ -834,6 +777,10 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
+                    // Disabled legend here because we have a custom HTML one
+                    legend: {
+                        display: false
+                    },
                     title: {
                         display: false
                     },
@@ -924,7 +871,7 @@
             }
         });
 
-        // Context Heatmap
+        // Context Heatmap (as a Bar Chart)
         const contextHeatmapCtx = document.getElementById('contextHeatmap').getContext('2d');
         const contextHeatmapChart = new Chart(contextHeatmapCtx, {
             type: 'bar',
@@ -958,8 +905,23 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
+                    // ***FIX 2: Enable datalabels for this chart***
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        color: '#333',
+                        font: {
+                            weight: 'bold'
+                        },
+                        formatter: (value) => value + '%'
+                    },
                     title: {
                         display: false
+                    },
+                    // ***FIX 3: Enable the chart's built-in legend***
+                    legend: {
+                        display: true,
+                        position: 'bottom'
                     }
                 },
                 scales: {
@@ -984,7 +946,8 @@
                 datasets: [
                     {
                         label: 'MMR (per 100,000)',
-                        data: [165, 158, 148, 136, null, 120],
+                        // ***FIX 5: Corrected data to not include target***
+                        data: [165, 158, 148, 136, null, null],
                         borderColor: '#e74c3c',
                         backgroundColor: 'rgba(231, 76, 60, 0.1)',
                         tension: 0.3,
@@ -998,7 +961,7 @@
                         backgroundColor: 'transparent',
                         tension: 0.3,
                         fill: false,
-                        pointStyle: 'line'
+                        // ***FIX 5: Removed invalid 'pointStyle'***
                     }
                 ]
             },
@@ -1050,7 +1013,18 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
+                    // ***FIX 2: Enable datalabels for this chart***
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (value) => (value / 1000).toFixed(0) + 'k', // Format as '505k'
+                        color: '#444'
+                    },
                     title: {
+                        display: false
+                    },
+                    // Disable legend as it's not needed for a single dataset
+                    legend: {
                         display: false
                     }
                 },
@@ -1066,13 +1040,7 @@
             }
         });
 
-        // Tab functionality
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
+        // ***FIX 4: Removed non-functional tab script***
     </script>
 </body>
 </html>
