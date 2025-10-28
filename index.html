@@ -6,7 +6,6 @@
     <title>LNOB Dashboard: Leave No One Behind Monitoring</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Included the Chart.js datalabels plugin -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
@@ -363,17 +362,6 @@
             font-size: 0.9rem;
         }
         
-        /* Removed non-functional tab styles */
-        
-        .heatmap-container {
-            display: grid;
-            /* Changed to 1fr for better responsiveness */
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        
-        /* Removed disconnected heatmap legend styles */
-        
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -391,10 +379,6 @@
             
             .chart-container {
                 height: 300px;
-            }
-            
-            .heatmap-container {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -447,6 +431,60 @@
             </div>
         </section>
 
+        <section id="lnob" class="section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">1. LNOB Reach & Trends</h2>
+                    <p class="section-subtitle">Tracking inclusion of vulnerable populations over time</p>
+                </div>
+            </div>
+
+            <div class="chart-grid">
+                <div class="chart-container">
+                    <h3 class="chart-title">LNOB Subgroup Reach as % of Total Beneficiaries (2020-2024)</h3>
+                    <canvas id="lnobLineChart"></canvas>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #e74c3c;"></div>
+                            <span>Adolescent Girls</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #3498db;"></div>
+                            <span>Persons with Disabilities</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #2ecc71;"></div>
+                            <span>Transgender Individuals</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #f39c12;"></div>
+                            <span>Sex Workers</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #9b59b6;"></div>
+                            <span>Indigenous Women</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Absolute Numbers Reached by Vulnerable Group</h3>
+                    <canvas id="lnobAreaChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-grid">
+                <div class="chart-container">
+                    <h3 class="chart-title">Equity Gaps in Maternal Care</h3>
+                    <canvas id="equityBarChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3 class="chart-title">Transgender Population: Service Access Disparities</h3>
+                    <canvas id="transgenderChart"></canvas>
+                </div>
+            </div>
+        </section>
+
         <section id="geographic" class="section">
             <div class="section-header">
                 <div>
@@ -477,7 +515,7 @@
                 </div>
             </div>
 
-           <div class="chart-container">
+            <div class="chart-container">
                 <h3 class="chart-title">Service Availability Across Development vs. Humanitarian Contexts</h3>
                 <canvas id="contextHeatmap"></canvas>
             </div>
