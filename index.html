@@ -477,12 +477,9 @@
                 </div>
             </div>
 
-            <div class="chart-container">
+           <div class="chart-container">
                 <h3 class="chart-title">Service Availability Across Development vs. Humanitarian Contexts</h3>
-                <div class="heatmap-container">
-                    <canvas id="contextHeatmap"></canvas>
-                    <!-- Removed the disconnected static heatmap legend -->
-                </div>
+                <canvas id="contextHeatmap"></canvas>
             </div>
 
             <div class="dashboard-grid">
@@ -496,8 +493,6 @@
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: 73%; background-color: var(--success);"></div>
                         </div>
-                    </div>
-                    <div class="progress-container">
                         <div class="progress-label">
                             <span>Hospitals with GBV-Trained Staff</span>
                             <span>30%</span>
@@ -505,8 +500,6 @@
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: 30%; background-color: var(--warning);"></div>
                         </div>
-                    </div>
-                    <div class="progress-container">
                         <div class="progress-label">
                             <span>SRHR Indicators in DHIS2</span>
                             <span>8/14</span>
@@ -537,50 +530,6 @@
                             <div class="metric-label">Persons with Disabilities Reached</div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="lnob" class="section">
-            <div class="section-header">
-                <div>
-                    <h2 class="section-title">1. LNOB Reach & Trends</h2>
-                    <p class="section-subtitle">Tracking inclusion of vulnerable populations over time</p>
-                </div>
-                <!-- Removed non-functional tabs -->
-            </div>
-
-            <div class="chart-grid">
-                <div class="chart-container">
-                    <h3 class="chart-title">LNOB Subgroup Reach as % of Total Beneficiaries (2020-2024)</h3>
-                    <canvas id="lnobLineChart"></canvas>
-                    <div class="chart-legend">
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #e74c3c;"></div>
-                            <span>Adolescent Girls</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #3498db;"></div>
-                            <span>Persons with Disabilities</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #2ecc71;"></div>
-                            <span>Transgender Individuals</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #f39c12;"></div>
-                            <span>Sex Workers</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #9b59b6;"></div>
-                            <span>Indigenous Women</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="chart-container">
-                    <h3 class="chart-title">Absolute Numbers Reached by Vulnerable Group</h3>
-                    <canvas id="lnobAreaChart"></canvas>
                 </div>
             </div>
         </section>
@@ -622,7 +571,7 @@
     </footer>
 
     <script>
-        // ***FIX 1: Register the datalabels plugin***
+        // Register Chart.js plugins
         Chart.register(ChartDataLabels);
 
         // Initialize the map
@@ -633,7 +582,7 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Sample data for priority districts
+        // Sample data for priority districts (in a real implementation, this would come from an API)
         const districtData = [
             { name: "Cox's Bazar", lat: 21.4272, lng: 92.0058, anc4: 85, readiness: 78, midwife: 92 },
             { name: "Bandarban", lat: 21.8311, lng: 92.3686, anc4: 72, readiness: 65, midwife: 68 },
@@ -777,10 +726,6 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    // Disabled legend here because we have a custom HTML one
-                    legend: {
-                        display: false
-                    },
                     title: {
                         display: false
                     },
@@ -871,7 +816,97 @@
             }
         });
 
-        // Context Heatmap (as a Bar Chart)
+        // Equity Bar Chart
+        const equityBarCtx = document.getElementById('equityBarChart').getContext('2d');
+        const equityBarChart = new Chart(equityBarCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Riverine-Displaced Women', 'Non-Displaced Women'],
+                datasets: [{
+                    label: 'Continuum Care Coverage',
+                    data: [3.1, 27],
+                    backgroundColor: [
+                        'rgba(231, 76, 60, 0.7)',
+                        'rgba(52, 152, 219, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(231, 76, 60, 1)',
+                        'rgba(52, 152, 219, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '% Receiving Continuum Care'
+                        },
+                        max: 30
+                    }
+                }
+            }
+        });
+
+        // Transgender Chart
+        const transgenderCtx = document.getElementById('transgenderChart').getContext('2d');
+        const transgenderChart = new Chart(transgenderCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Violence Experience', 'Credit Access', 'HIV Positivity'],
+                datasets: [{
+                    label: 'Transgender Population',
+                    data: [80, 2, 9],
+                    backgroundColor: [
+                        'rgba(231, 76, 60, 0.7)',
+                        'rgba(52, 152, 219, 0.7)',
+                        'rgba(46, 204, 113, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(231, 76, 60, 1)',
+                        'rgba(52, 152, 219, 1)',
+                        'rgba(46, 204, 113, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Percentage (%)'
+                        },
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Context Heatmap
         const contextHeatmapCtx = document.getElementById('contextHeatmap').getContext('2d');
         const contextHeatmapChart = new Chart(contextHeatmapCtx, {
             type: 'bar',
@@ -880,21 +915,21 @@
                 datasets: [
                     {
                         label: 'Cox\'s Bazar Camps',
-                        data: [85, 78, 92, 88],
+                        data: [65, 70, 80, 85],
                         backgroundColor: 'rgba(231, 76, 60, 0.7)',
                         borderColor: 'rgba(231, 76, 60, 1)',
                         borderWidth: 1
                     },
                     {
                         label: 'Host Communities',
-                        data: [65, 58, 72, 68],
+                        data: [55, 60, 65, 70],
                         backgroundColor: 'rgba(52, 152, 219, 0.7)',
                         borderColor: 'rgba(52, 152, 219, 1)',
                         borderWidth: 1
                     },
                     {
                         label: 'Priority Districts',
-                        data: [45, 48, 52, 50],
+                        data: [45, 50, 55, 60],
                         backgroundColor: 'rgba(46, 204, 113, 0.7)',
                         borderColor: 'rgba(46, 204, 113, 1)',
                         borderWidth: 1
@@ -905,23 +940,17 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    // ***FIX 2: Enable datalabels for this chart***
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'top',
-                        color: '#333',
-                        font: {
-                            weight: 'bold'
-                        },
-                        formatter: (value) => value + '%'
-                    },
                     title: {
                         display: false
                     },
-                    // ***FIX 3: Enable the chart's built-in legend***
-                    legend: {
-                        display: true,
-                        position: 'bottom'
+                    datalabels: {
+                        color: '#fff',
+                        font: {
+                            weight: 'bold'
+                        },
+                        formatter: function(value, context) {
+                            return value + '%';
+                        }
                     }
                 },
                 scales: {
@@ -946,8 +975,7 @@
                 datasets: [
                     {
                         label: 'MMR (per 100,000)',
-                        // ***FIX 5: Corrected data to not include target***
-                        data: [165, 158, 148, 136, null, null],
+                        data: [165, 158, 148, 136, 130, 120],
                         borderColor: '#e74c3c',
                         backgroundColor: 'rgba(231, 76, 60, 0.1)',
                         tension: 0.3,
@@ -960,8 +988,7 @@
                         borderDash: [5, 5],
                         backgroundColor: 'transparent',
                         tension: 0.3,
-                        fill: false,
-                        // ***FIX 5: Removed invalid 'pointStyle'***
+                        fill: false
                     }
                 ]
             },
@@ -1013,19 +1040,22 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    // ***FIX 2: Enable datalabels for this chart***
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'top',
-                        formatter: (value) => (value / 1000).toFixed(0) + 'k', // Format as '505k'
-                        color: '#444'
-                    },
                     title: {
                         display: false
                     },
-                    // Disable legend as it's not needed for a single dataset
                     legend: {
                         display: false
+                    },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        color: '#2c3e50',
+                        font: {
+                            weight: 'bold'
+                        },
+                        formatter: function(value, context) {
+                            return value.toLocaleString();
+                        }
                     }
                 },
                 scales: {
@@ -1039,8 +1069,6 @@
                 }
             }
         });
-
-        // ***FIX 4: Removed non-functional tab script***
     </script>
 </body>
 </html>
